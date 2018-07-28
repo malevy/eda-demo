@@ -1,0 +1,12 @@
+{
+  "id":"aaaa-1111",
+  "timestamp":"2018-07-22 14:56:00",
+  "messageType":"ticketing.order.created.v1",
+  "payload":{
+    "id":"00001",
+    "showId":"456765",
+    "status":"pending",
+    "seats":["1A","1B","1C"]
+  }
+}
+

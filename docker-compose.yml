@@ -1,0 +1,32 @@
+version: '3'
+services:
+  rabbit:
+    image: "rabbitmq:management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+#  eureka:
+#    image: "springcloud/eureka"
+#    ports:
+#      - "8761:8761"
+  order-service:
+    build: ./eda-order-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbit
+#      - eureka
+    environment:
+      spring.rabbitmq.host: rabbit
+
+  reservation-service:
+    build: ./eda-reservation-service
+    ports:
+      - "8081:8080"
+    depends_on:
+      - rabbit
+#      - eureka
+    environment:
+      spring.rabbitmq.host: rabbit
+
+
