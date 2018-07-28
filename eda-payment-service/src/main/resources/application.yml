@@ -1,0 +1,35 @@
+spring:
+  cloud:
+    stream:
+      rabbit:
+        bindings:
+          input:
+            consumer:
+              bindingRoutingKey: ticketing.#
+          output:
+            producer:
+              # configure spring cloud stream to use the value of the topic header
+              # on the message as the topic when publishing.
+              routingKeyExpression: 'headers["topic"]'
+
+      # the destination is the RMQ exchange while the group is the RMQ queue
+      bindings:
+        input:
+          destination: ticketing-events
+          group: payment-processor
+          binder: local_rabbit
+        output:
+          destination: ticketing-events
+          binder: local_rabbit
+
+      binders:
+        local_rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+                virtual-host: /

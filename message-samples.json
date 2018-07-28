@@ -10,3 +10,14 @@
   }
 }
 
+{
+  "id":"bbbb-2222",
+  "timestamp":"2018-07-22 14:56:00",
+  "messageType":"ticketing.seats.reserved.v1",
+  "payload":{
+    "orderId":"00001",
+    "showId":"456765",
+    "status":"reserved",
+    "seats":["1A","1B","1C"]
+  }
+}

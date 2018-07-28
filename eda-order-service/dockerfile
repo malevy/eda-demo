@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:10
 COPY ./target/eda-order-0.0.1-SNAPSHOT.jar /bin
 WORKDIR /bin
 ENTRYPOINT ["java", "-jar", "eda-order-0.0.1-SNAPSHOT.jar"]

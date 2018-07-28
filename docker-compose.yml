@@ -29,4 +29,13 @@ services:
     environment:
       spring.rabbitmq.host: rabbit
 
+  payment-service:
+    build: ./eda-payment-service
+    ports:
+    - "8082:8080"
+    depends_on:
+    - rabbit
+    #      - eureka
+    environment:
+      spring.rabbitmq.host: rabbit
 
