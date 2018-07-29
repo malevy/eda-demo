@@ -17,7 +17,7 @@ public class WorkflowProcessor {
     private Publisher publisher;
 
     public static class MessageTypes {
-        public static final String PAYMENTAPPROVED_V1 = "ticketing.payment.accepted.v1";
+        public static final String PAYMENTACCEPTED_V1 = "ticketing.payment.accepted.v1";
     }
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -34,15 +34,16 @@ public class WorkflowProcessor {
         final var seats = envelope.getPayload();
 
         // process payment here...
+        log.info("action: payment-processed | orderId: {}", seats.getOrderId());
 
         final var paymentApprovedPayload = new PaymentApproved(seats.getOrderId(),
                                                 seats.getShowId(),
                                                 RandomStringUtils.random(12, true, true),
                                                 "Your payment was accepted");
 
-        final var paymentApprovedEvent = new Envelope<>(MessageTypes.PAYMENTAPPROVED_V1, paymentApprovedPayload);
+        final var paymentApprovedEvent = new Envelope<>(MessageTypes.PAYMENTACCEPTED_V1, paymentApprovedPayload);
 
-        this.publisher.publish(paymentApprovedEvent, MessageTypes.PAYMENTAPPROVED_V1);
+        this.publisher.publish(paymentApprovedEvent, MessageTypes.PAYMENTACCEPTED_V1);
         log.info("action: publishing | messageId: {} | messageType: {} | orderId: {}",
                 paymentApprovedEvent.getId(), paymentApprovedEvent.getMessageType(), seats.getOrderId());
 
