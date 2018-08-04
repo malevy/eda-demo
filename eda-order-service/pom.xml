@@ -44,6 +44,11 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-spring</artifactId>
+            <version>3.10.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -70,13 +75,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.25</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.25</version>
-        </dependency>
-
     </dependencies>
 
     <dependencyManagement>

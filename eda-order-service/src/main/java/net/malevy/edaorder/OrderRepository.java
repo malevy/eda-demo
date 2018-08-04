@@ -1,18 +1,24 @@
 package net.malevy.edaorder;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class OrderRepository {
 
-    private final static ConcurrentHashMap<String, Order> storage = new ConcurrentHashMap<>();
+    private CacheManager cacheManager;
+
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    public OrderRepository(CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
+    }
 
     public Order save(Order order) {
         Assert.notNull(order, "must supply an order");
@@ -25,7 +31,7 @@ public class OrderRepository {
             clone.setStatus(Order.Statuses.PENDING);
         }
 
-        OrderRepository.storage.put(clone.getId(), clone);
+        cacheInstance().put(clone.getId(), clone);
 
         return clone;
     }
@@ -33,7 +39,11 @@ public class OrderRepository {
     public Optional<Order> getById(String id) {
         Assert.hasText(id, "must supply an id");
 
-        return Optional.ofNullable(OrderRepository.storage.get(id));
+        return Optional.ofNullable(cacheInstance().get(id, Order.class)) ;
+    }
+
+    private Cache cacheInstance() {
+        return cacheManager.getCache("orders");
     }
 
 }
