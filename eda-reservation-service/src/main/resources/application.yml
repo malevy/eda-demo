@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: eda-reservation
   cloud:
     stream:
       rabbit:

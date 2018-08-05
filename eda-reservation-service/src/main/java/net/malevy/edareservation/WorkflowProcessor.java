@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class WorkflowProcessor {
 
     private Publisher publisher;
-    private OrderRepository orderRepository;
+    private final ReservationService reservationService;
 
     public static class MessageTypes {
         public static final String SEATSRESERVED_V1 = "ticketing.seats.reserved.v1";
@@ -26,10 +26,10 @@ public class WorkflowProcessor {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public WorkflowProcessor(final Publisher publisher,
-                             final OrderRepository orderRepository) {
+                             final ReservationService reservationService) {
 
         this.publisher = publisher;
-        this.orderRepository = orderRepository;
+        this.reservationService = reservationService;
     }
 
     @StreamListener(target = Processor.INPUT, condition = "headers['topic']=='ticketing.order.created.v1'")
@@ -39,16 +39,12 @@ public class WorkflowProcessor {
 
         final var order = envelope.getPayload();
 
-        // do something useful here...
-        this.orderRepository.Register(order);
-        log.info("action: seats-reserved | orderId: {}", order.getId());
+        final Seats reservation = this.reservationService.reserve(
+                order.getId(),
+                order.getShowId(),
+                order.getSeats());
 
-        final Seats seatsReservedPayload = new Seats(order.getId(),
-                                                order.getShowId(),
-                                                Seats.Statuses.RESERVED,
-                                                new ArrayList<>(order.getSeats()));
-
-        final Envelope<Seats> seatsReservedEvent = new Envelope<>(MessageTypes.SEATSRESERVED_V1, seatsReservedPayload);
+        final Envelope<Seats> seatsReservedEvent = new Envelope<>(MessageTypes.SEATSRESERVED_V1, reservation);
 
         this.publisher.publish(seatsReservedEvent, MessageTypes.SEATSRESERVED_V1);
         log.info("action: publishing | messageId: {} | messageType: {} | orderId: {}",
@@ -62,21 +58,15 @@ public class WorkflowProcessor {
                 envelope.getId(), envelope.getMessageType(), envelope.getPayload().getOrderId());
 
         final var payment = envelope.getPayload();
-        final var order = this.orderRepository.Retrieve(payment.getOrderId()).get();
 
-        // business stuff goes here
-        log.info("action: seats-assigned | orderId: {}", order.getId());
+        this.reservationService.completeReservation(payment.getOrderId());
+        final var seats = this.reservationService.fetch(payment.getOrderId()).get();
 
-        final Seats seatsReservedPayload = new Seats(order.getId(),
-                order.getShowId(),
-                Seats.Statuses.RESERVED,
-                new ArrayList<>(order.getSeats()));
-
-        final Envelope<Seats> seatsReservedEvent = new Envelope<>(MessageTypes.SEATSASSIGNED_V1, seatsReservedPayload);
+        final Envelope<Seats> seatsReservedEvent = new Envelope<>(MessageTypes.SEATSASSIGNED_V1, seats);
 
         this.publisher.publish(seatsReservedEvent, MessageTypes.SEATSASSIGNED_V1);
         log.info("action: publishing | messageId: {} | messageType: {} | orderId: {}",
-                seatsReservedEvent.getId(), seatsReservedEvent.getMessageType(), order.getId());
+                seatsReservedEvent.getId(), seatsReservedEvent.getMessageType(), seats.getOrderId());
 
     }
 
