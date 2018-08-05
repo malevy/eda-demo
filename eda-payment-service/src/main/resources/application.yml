@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: eda-payment
   cloud:
     stream:
       rabbit:
