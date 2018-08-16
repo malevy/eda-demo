@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Seats {
+public class Seats implements Serializable {
 
     public static class Statuses implements Serializable {
         public final static String RESERVED = "reserved";

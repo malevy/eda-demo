@@ -5,21 +5,6 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-#  eureka:
-#    image: "springcloud/eureka"
-#    ports:
-#      - "8761:8761"
-
-  order-service:
-    build: ./eda-order-service
-    image: eda-order-service:latest
-    ports:
-      - "8080:8080"
-    depends_on:
-      - rabbit
-#      - eureka
-    environment:
-      spring.rabbitmq.host: rabbit
 
   reservation-service:
     build: ./eda-reservation-service
@@ -28,7 +13,6 @@ services:
       - "8081:8080"
     depends_on:
       - rabbit
-#      - eureka
     environment:
       spring.rabbitmq.host: rabbit
 
@@ -39,7 +23,22 @@ services:
     - "8082:8080"
     depends_on:
     - rabbit
-    #      - eureka
     environment:
       spring.rabbitmq.host: rabbit
+
+  order-service:
+    build: ./eda-order-service
+    image: eda-order-service:latest
+    ports:
+    - "8080:8080"
+    depends_on:
+    - rabbit
+    - reservation-service
+    - payment-service
+    environment:
+      spring.rabbitmq.host: rabbit
+      app.services.reservation.host: reservation-service
+      app.services.reservation.port: 8080
+      app.services.payment.host: payment-service
+      app.services.payment.port: 8080
 

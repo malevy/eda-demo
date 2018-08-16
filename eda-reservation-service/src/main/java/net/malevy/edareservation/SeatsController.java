@@ -1,11 +1,8 @@
 package net.malevy.edareservation;
 
+import lombok.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -20,16 +17,14 @@ public class SeatsController {
     }
 
     @PostMapping("/seats/reserve")
-    public Mono<ResponseEntity<?>> reserve(final @Payload String orderId,
-                                           final @Payload String showId,
-                                           final @Payload List<String> seats) {
+    public Mono<ResponseEntity<?>> reserve(final @RequestBody ReserveRequest request) {
 
-        final var reservation = this.reservationService.reserve(orderId, showId, seats);
+        final var reservation = this.reservationService.reserve(request.orderId, request.showId, request.seats);
 
         return Mono.just(ResponseEntity.ok(reservation));
     }
 
-    @PostMapping("reservations/{id}/complete")
+    @PostMapping("/reservations/{id}/complete")
     public Mono<ResponseEntity<?>> complete(final @PathVariable String id) {
 
         try {
@@ -53,4 +48,11 @@ public class SeatsController {
         return Mono.just(response);
     }
 
+}
+
+@Value
+class ReserveRequest {
+    public String orderId;
+    public String showId;
+    public List<String> seats;
 }
