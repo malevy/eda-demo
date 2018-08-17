@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: eda-reservation
   cloud:
     stream:
       rabbit:
@@ -32,3 +34,10 @@ spring:
     username: guest
     password: guest
     virtual-host: /
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: ${eureka.instance.hostname}

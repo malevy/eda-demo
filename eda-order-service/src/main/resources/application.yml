@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: eda-order
   cloud:
     stream:
       rabbit:
@@ -29,3 +31,13 @@ spring:
     username: guest
     password: guest
     virtual-host: /
+
+app:
+  services:
+    payment:
+      host: localhost
+      port: 8081
+    reservation:
+      host: localhost
+      port: 8082
+

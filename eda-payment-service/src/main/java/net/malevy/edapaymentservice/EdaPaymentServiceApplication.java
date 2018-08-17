@@ -10,6 +10,7 @@ import org.springframework.cloud.stream.messaging.Processor;
 public class EdaPaymentServiceApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(EdaPaymentServiceApplication.class, args);
     }
 }
