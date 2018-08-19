@@ -46,7 +46,7 @@ public class OrderController {
         final Order committedOrder = orderRepository.save(order);
 
         uriComponentsBuilder
-                .replacePath("order")
+                .replacePath("orders")
                 .pathSegment(order.getId());
 
         // reserve seats
@@ -86,7 +86,7 @@ public class OrderController {
         final Order committedOrder = orderRepository.save(order);
 
         uriComponentsBuilder
-                .replacePath("order")
+                .replacePath("orders")
                 .pathSegment(order.getId());
 
         ResponseEntity<Order> response = ResponseEntity

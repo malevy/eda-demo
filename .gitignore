@@ -110,5 +110,7 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
+### Gatling ###
+gatling/results
 
 # End of https://www.gitignore.io/api/java,maven,intellij
