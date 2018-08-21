@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: chaos-monkey
   application:
     name: eda-payment
   cloud:
@@ -35,9 +37,15 @@ spring:
     password: guest
     virtual-host: /
 
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    service-url:
-      defaultZone: ${eureka.instance.hostname}
+chaos:
+  monkey:
+    enabled: false
+    assaults:
+      exceptions-active: false
+      kill-application-active: true
+      latency-active: true
+    watcher:
+      component: true
+      repository: true
+      rest-controller: true
+      service: true
