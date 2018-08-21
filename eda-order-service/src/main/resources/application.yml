@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: chaos-monkey
   application:
     name: eda-order
   cloud:
@@ -41,3 +43,15 @@ app:
       host: localhost
       port: 8082
 
+chaos:
+  monkey:
+    enabled: false
+    assaults:
+      exceptions-active: false
+      kill-application-active: false
+      latency-active: true
+    watcher:
+      component: true
+      repository: true
+      rest-controller: true
+      service: true

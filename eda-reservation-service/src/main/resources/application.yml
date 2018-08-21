@@ -1,4 +1,19 @@
+chaos:
+  monkey:
+    enabled: false
+    assaults:
+      latency-active: true
+      kill-application-active: true
+    watcher:
+      service: true
+      repository: true
+      rest-controller: true
+      component: false
+
+
 spring:
+  profiles:
+    active: chaos-monkey
   application:
     name: eda-reservation
   cloud:
@@ -35,9 +50,3 @@ spring:
     password: guest
     virtual-host: /
 
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    service-url:
-      defaultZone: ${eureka.instance.hostname}

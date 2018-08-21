@@ -19,22 +19,24 @@ class CreateOrderUsingEventsDemo extends Simulation {
     .userAgentHeader("Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0")
 
   val createOrderScenario = scenario("CreateOrder")
-    .exec(
-      http("post-order")
-        .post("/orders/")
-        .body(StringBody("""{"showId":"456765","status":"pending","seats":["1A","1B","1C"]}""")).asJSON
-        .check(status.is(201))
+    .repeat(5) {
+      exec(
+        http("post-order")
+          .post("/orders/")
+          .body(StringBody("""{"showId":"456765","status":"pending","seats":["1A","1B","1C"]}""")).asJSON
+          .check(status.is(201))
 
-        // save off the location header
-        .check(header(HttpHeaderNames.Location).saveAs("fetchUrl"))) // [1]
-    .pause(1 seconds)
-    .exec(
-      http("fetch-order")
+          // save off the location header
+          .check(header(HttpHeaderNames.Location).saveAs("fetchUrl"))) // [1]
+        .pause(2 seconds)
+        .exec(
+          http("fetch-order")
 
-        // fetch from the saved location
-        .get("${fetchUrl}")
-        .check(status.is(200)))
-    .pause(1 seconds)
+            // fetch from the saved location
+            .get("${fetchUrl}")
+            .check(status.is(200)))
+        .pause(1 seconds)
+    }
 
   setUp( 
     createOrderScenario.inject(rampUsers(20) over (5 seconds))

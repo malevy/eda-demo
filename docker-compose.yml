@@ -1,3 +1,6 @@
+# chaos_monkey_enabled will pick up the value from the
+# shell when 'docker-compose up' is executed
+
 version: '3'
 services:
   rabbit:
@@ -9,26 +12,31 @@ services:
   reservation-service:
     build: ./eda-reservation-service
     image: eda-reservation-service:latest
+    restart: always
     ports:
       - "8081:8080"
     depends_on:
       - rabbit
     environment:
       spring.rabbitmq.host: rabbit
+      chaos_monkey_enabled:
 
   payment-service:
     build: ./eda-payment-service
     image: eda-payment-service:latest
+    restart: always
     ports:
     - "8082:8080"
     depends_on:
     - rabbit
     environment:
       spring.rabbitmq.host: rabbit
+      chaos_monkey_enabled:
 
   order-service:
     build: ./eda-order-service
     image: eda-order-service:latest
+    restart: always
     ports:
     - "8080:8080"
     depends_on:
@@ -41,4 +49,5 @@ services:
       app.services.reservation.port: 8080
       app.services.payment.host: payment-service
       app.services.payment.port: 8080
+      chaos_monkey_enabled:
 
