@@ -1,0 +1,85 @@
+GET http://localhost:8080/actuator/health
+
+###
+
+POST http://localhost:8080/orders
+content-type: application/json
+accept: application/json
+
+{
+  "id":"00001",
+  "showId":"456765",
+  "status":"pending",
+  "seats":["1A","1B","1C"]
+}
+
+<> 2018-08-22T080344.201.json
+<> 2018-08-04T071945.201.json
+<> 2018-08-04T071021.201.json
+###
+
+GET http://localhost:8080/orders/00001
+accept: application/json
+
+<> 2018-08-16T014340.200.json
+<> 2018-08-04T072022.200.json
+<> 2018-08-04T071053.400.json
+
+###
+POST http://localhost:8080/payments/accept
+content-type: application/json
+accept: application/json
+
+{
+  "orderId":"00001",
+  "showId":"456765"
+}
+
+###
+POST http://localhost:8080/seats/reserve
+content-type: application/json
+accept: application/json
+
+{
+  "orderId":"00001",
+  "showId":"456765",
+  "seats":["1A","1B","1C"]
+}
+
+###
+
+POST http://localhost:8080/reservations/00001/complete
+accept: application/json
+
+<> 2018-08-08T093105.200.json
+
+###
+
+GET http://localhost:8080/reservations/00001
+accept: application/json
+
+<> 2018-08-08T093436.200.json
+
+###
+POST http://localhost:8080/orders/sync
+content-type: application/json
+accept: application/json
+
+{
+  "id":"00001",
+  "showId":"456765",
+  "status":"pending",
+  "seats":["1A","1B","1C"]
+}
+
+<> 2018-08-21T111438.500.json
+<> 2018-08-16T014224.201.json
+###
+
+GET http://localhost:8080/orders/counts
+accept: application/json
+
+<> 2018-08-22T074526.200.json
+<> 2018-08-21T111449.200.json
+<> 2018-08-21T111411.200.json
+###
