@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: eda-service-registry
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+

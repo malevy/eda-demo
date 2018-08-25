@@ -9,6 +9,7 @@
         <module name="eda-order" />
         <module name="eda-payment-service" />
         <module name="eda-reservation-service" />
+        <module name="eda-service-registry" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
