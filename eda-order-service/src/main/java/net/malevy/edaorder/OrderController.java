@@ -1,18 +1,13 @@
 package net.malevy.edaorder;
 
 import lombok.extern.slf4j.Slf4j;
-import net.malevy.edaorder.messages.PaymentApproved;
 import net.malevy.edaorder.messages.Seats;
-import org.springframework.cache.CacheManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @Slf4j
@@ -22,17 +17,19 @@ public class OrderController {
     private final ReservationGateway reservationGateway;
     private final PaymentGateway paymentGateway;
     private final Publisher publisher;
+    private final CountAggregator countAggregator;
 
     public OrderController(OrderRepository orderRepository,
                            ReservationGateway reservationGateway,
                            PaymentGateway paymentGateway,
                            Publisher publisher,
-                           RestTemplate restTemplate) {
+                           CountAggregator countAggregator) {
 
         this.orderRepository = orderRepository;
         this.reservationGateway = reservationGateway;
         this.paymentGateway = paymentGateway;
         this.publisher = publisher;
+        this.countAggregator = countAggregator;
     }
 
     @PostMapping("/orders/sync")
@@ -44,6 +41,7 @@ public class OrderController {
                 .body("no order was supplied"));
 
         final Order committedOrder = orderRepository.save(order);
+        countAggregator.recordCreated();
 
         uriComponentsBuilder
                 .replacePath("orders")
@@ -66,6 +64,7 @@ public class OrderController {
         // complete order
         committedOrder.setStatus(Order.Statuses.COMPLETED);
         this.orderRepository.save(committedOrder);
+        countAggregator.recordCompleted();
 
         ResponseEntity<Order> response = ResponseEntity
                 .created(uriComponentsBuilder.build().toUri())
@@ -84,6 +83,7 @@ public class OrderController {
                 .body("no order was supplied"));
 
         final Order committedOrder = orderRepository.save(order);
+        countAggregator.recordCreated();
 
         uriComponentsBuilder
                 .replacePath("orders")
@@ -110,6 +110,21 @@ public class OrderController {
                 .orElse(ResponseEntity.notFound().build());
 
         return Mono.just(response);
+    }
+
+    @GetMapping("/orders/counts")
+    public Mono<ResponseEntity<?>> fetchCounts() {
+        log.info("fetching order statuc count");
+
+        return Mono.just(ResponseEntity.ok(countAggregator.getCounts()));
+    }
+
+    @DeleteMapping("/orders/counts")
+    public Mono<ResponseEntity<?>> clearCounts() {
+        log.info("clearing counts");
+        countAggregator.reset();
+
+        return Mono.just(ResponseEntity.ok("counts have been reset"));
     }
 
 }

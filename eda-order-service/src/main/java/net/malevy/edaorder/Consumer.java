@@ -12,10 +12,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class Consumer {
 
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+    private final CountAggregator countAggregator;
 
-    public Consumer(OrderRepository orderRepository) {
+    public Consumer(OrderRepository orderRepository,
+                    CountAggregator countAggregator) {
         this.orderRepository = orderRepository;
+        this.countAggregator = countAggregator;
     }
 
     @StreamListener(target = Processor.INPUT, condition = "headers['topic']=='ticketing.seats.assigned.v1'")
@@ -30,6 +33,7 @@ public class Consumer {
         wrappedOrder.ifPresent(order -> {
             order.setStatus(Order.Statuses.COMPLETED);
             this.orderRepository.save(order);
+            countAggregator.recordCompleted();
             log.info("action: order-completed | orderId: {}", order.getId());
         });
 
