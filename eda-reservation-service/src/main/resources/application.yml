@@ -13,6 +13,7 @@ chaos:
 eureka:
   instance:
     hostname: localhost
+    prefer-ip-address: true
   client:
     enabled: true
     register-with-eureka: true

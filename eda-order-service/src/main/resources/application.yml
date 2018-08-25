@@ -37,6 +37,7 @@ spring:
 eureka:
   instance:
     hostname: localhost
+    prefer-ip-address: true
   client:
     enabled: true
     register-with-eureka: true
@@ -47,11 +48,9 @@ eureka:
 app:
   services:
     payment:
-      host: localhost
-      port: 8081
+      host: eda-payment
     reservation:
-      host: localhost
-      port: 8082
+      host: eda-reservation
 
 chaos:
   monkey:

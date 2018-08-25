@@ -58,9 +58,5 @@ services:
     environment:
       spring.rabbitmq.host: rabbit
       eureka.instance.hostname: service-registry
-      app.services.reservation.host: reservation-service
-      app.services.reservation.port: 8080
-      app.services.payment.host: payment-service
-      app.services.payment.port: 8080
       chaos_monkey_enabled:
 
