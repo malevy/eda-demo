@@ -34,6 +34,16 @@ spring:
     password: guest
     virtual-host: /
 
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
 app:
   services:
     payment:
@@ -51,7 +61,8 @@ chaos:
       kill-application-active: false
       latency-active: true
     watcher:
-      component: true
+      component: false
       repository: true
       rest-controller: true
       service: true
+

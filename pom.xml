@@ -24,6 +24,7 @@
   </properties>
 
   <modules>
+    <module>eda-service-registry</module>
     <module>eda-order-service</module>
     <module>eda-reservation-service</module>
     <module>eda-payment-service</module>

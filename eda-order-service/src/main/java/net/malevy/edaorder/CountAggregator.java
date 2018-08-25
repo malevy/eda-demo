@@ -2,10 +2,11 @@ package net.malevy.edaorder;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Component
+@Service
 public class CountAggregator {
     private final AtomicInteger createdCount = new AtomicInteger(0);
     private final AtomicInteger completedCount = new AtomicInteger(0);
