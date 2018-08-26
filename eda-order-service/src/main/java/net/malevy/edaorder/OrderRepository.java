@@ -23,8 +23,8 @@ public class OrderRepository {
     public Order save(Order order) {
         Assert.notNull(order, "must supply an order");
 
-        final ModelMapper mapper = new ModelMapper();
-        final Order clone = mapper.map(order, Order.class);
+        final var mapper = new ModelMapper();
+        final var clone = mapper.map(order, Order.class);
 
         if (StringUtils.isEmpty(clone.getId())) {
             clone.setId(UUID.randomUUID().toString());

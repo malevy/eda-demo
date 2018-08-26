@@ -47,10 +47,8 @@ eureka:
 
 app:
   services:
-    payment:
-      host: eda-payment
-    reservation:
-      host: eda-reservation
+    payment: http://eda-payment
+    reservation: http://eda-reservation
 
 chaos:
   monkey:

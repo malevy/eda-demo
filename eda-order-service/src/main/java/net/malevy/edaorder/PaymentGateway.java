@@ -10,7 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class PaymentGateway {
 
-    ExternalServicesProperties externalServicesProperties;
+    private final ExternalServicesProperties externalServicesProperties;
     private final RestTemplate restTemplate;
 
     public PaymentGateway(ExternalServicesProperties externalServicesProperties,
@@ -20,11 +20,11 @@ public class PaymentGateway {
     }
 
     public PaymentApproved approve(Seats seats) {
-        String paymentApprovalUrl = UriComponentsBuilder.fromUri(externalServicesProperties.getPayment())
+        final var paymentApprovalUrl = UriComponentsBuilder.fromUri(externalServicesProperties.getPayment())
                 .path("/payments/accept")
                 .toUriString();
 
-        var paymentResponse = this.restTemplate
+        final var paymentResponse = this.restTemplate
                 .postForEntity(paymentApprovalUrl, seats, PaymentApproved.class);
 
         return paymentResponse.getBody();

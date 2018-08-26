@@ -22,20 +22,19 @@ public class ReservationGateway {
 
     public Seats reserve(Seats reservationRequest) {
 
-        String reserveUrl = UriComponentsBuilder.fromUri(externalServicesProperties.getReservation())
+        final var reserveUrl = UriComponentsBuilder.fromUri(externalServicesProperties.getReservation())
                 .path("/seats/reserve")
                 .toUriString();
 
-        var reservationResponse = this.restTemplate
+        final var reservationResponse = this.restTemplate
                 .postForEntity(reserveUrl,reservationRequest,Seats.class);
 
-        var reservation = reservationResponse.getBody();
-        return reservation;
+        return reservationResponse.getBody();
     }
 
     public void complete(String orderId) {
 
-        String completeUrl = UriComponentsBuilder.fromUri(externalServicesProperties.getReservation())
+        final var completeUrl = UriComponentsBuilder.fromUri(externalServicesProperties.getReservation())
                 .path("/reservations/{id}/complete")
                 .build(Map.ofEntries(Map.entry("id", orderId)))
                 .toString();

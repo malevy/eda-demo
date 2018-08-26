@@ -40,7 +40,7 @@ public class OrderController {
                 .badRequest()
                 .body("no order was supplied"));
 
-        final Order committedOrder = orderRepository.save(order);
+        final var committedOrder = orderRepository.save(order);
         countAggregator.recordCreated();
 
         uriComponentsBuilder
@@ -66,7 +66,7 @@ public class OrderController {
         this.orderRepository.save(committedOrder);
         countAggregator.recordCompleted();
 
-        ResponseEntity<Order> response = ResponseEntity
+        final var response = ResponseEntity
                 .created(uriComponentsBuilder.build().toUri())
                 .body(committedOrder);
 

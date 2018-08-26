@@ -22,7 +22,7 @@ public class Publisher {
 
     public void orderCreated(Order order) {
 
-        final Envelope<Order> payload = new Envelope<>(MessageTypes.OrderCreated_v1, order);
+        final var payload = new Envelope<>(MessageTypes.OrderCreated_v1, order);
 
         var message = MessageBuilder.withPayload(payload)
                 // spring cloud stream is configure to use the value of the topic header
