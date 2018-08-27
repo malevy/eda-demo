@@ -11,6 +11,8 @@ bus.
 #### build and run the demo
 > Note: there are opportunities for improvement here via automation
 
+> Requires Java 10
+
     mvn clean package
     docker-compose build --no-cache
     docker-compose up
@@ -24,7 +26,6 @@ submit an order using the request/response sync configuration
     content-type: application/json
     accept: application/json
     {
-      "id":"00001",
       "showId":"456765",
       "status":"pending",
       "seats":["1A","1B","1C"]
@@ -42,7 +43,6 @@ submit an order using the event-driven configuration
     accept: application/json
     
     {
-      "id":"00001",
       "showId":"456765",
       "status":"pending",
       "seats":["1A","1B","1C"]
@@ -51,7 +51,19 @@ submit an order using the event-driven configuration
 The above request will result in a 201 with the location header
 set to the URL of the order.
 
+#### Simulating load
+The included script *run-gatling-container.sh* will build and 
+and launch a container with an instance of Gatling. There are two 
+scripts. One will exercise the request/response path and the other 
+will challenge the eventing path
 
+#### Embracing chaos
+Netflix's Chaos Monkey has been integrated thanks to 
+[Chaos Monkey for Spring Book](https://guides.github.com/pdfs/markdown-cheatsheet-online.pdf)
+by CodeCentric. It can be activated by setting the environment variable *chaos_monkey_enabled* 
+to *true* prior to spinning up the containers.
+
+    export chaos_monkey_enabled=true
 
 
 
