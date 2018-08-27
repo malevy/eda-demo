@@ -8,7 +8,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

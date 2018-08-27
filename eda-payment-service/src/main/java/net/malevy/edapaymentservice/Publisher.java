@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class Publisher {
-    private Processor processor;
+    private final Processor processor;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public Publisher(final Processor processor) {

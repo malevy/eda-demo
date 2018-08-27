@@ -14,7 +14,7 @@ public class Publisher {
         public static final String OrderCreated_v1 = "ticketing.order.created.v1";
     }
 
-    private Source source;
+    private final Source source;
 
     public Publisher(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") final Source source) {
         this.source = source;

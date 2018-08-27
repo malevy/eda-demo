@@ -1,7 +1,6 @@
 package net.malevy.edaorder;
 
 import lombok.Getter;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,8 +13,8 @@ public class CountAggregator {
     public void recordCreated() {createdCount.getAndIncrement(); }
     public void recordCompleted() {completedCount.getAndIncrement(); }
 
-    public int currentCreatedCount() { return createdCount.get(); }
-    public int currentCompletedCount() { return completedCount.get(); }
+    private int currentCreatedCount() { return createdCount.get(); }
+    private int currentCompletedCount() { return completedCount.get(); }
 
     public OrderStatusCounts getCounts() {
         return new OrderStatusCounts(currentCreatedCount(), currentCompletedCount());

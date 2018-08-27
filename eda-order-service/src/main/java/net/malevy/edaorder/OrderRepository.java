@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public class OrderRepository {
 
-    private CacheManager cacheManager;
+    private final CacheManager cacheManager;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public OrderRepository(CacheManager cacheManager) {
