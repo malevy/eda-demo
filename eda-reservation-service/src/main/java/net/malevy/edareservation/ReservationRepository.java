@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public class ReservationRepository {
 
-    private CacheManager cacheManager;
+    private final CacheManager cacheManager;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public ReservationRepository(CacheManager cacheManager) {

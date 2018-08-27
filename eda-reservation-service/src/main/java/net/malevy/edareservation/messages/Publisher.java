@@ -18,7 +18,7 @@ public class Publisher {
 
     public void publish(final Envelope<?> envelope, String messageType) {
 
-        final Message message = MessageBuilder.withPayload(envelope)
+        final var message = MessageBuilder.withPayload(envelope)
                 .setHeader("topic", messageType)
                 .build();
 

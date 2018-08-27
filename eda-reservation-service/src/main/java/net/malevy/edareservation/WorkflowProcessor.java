@@ -5,16 +5,13 @@ import net.malevy.edareservation.messages.*;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 @Slf4j
 public class WorkflowProcessor {
 
-    private Publisher publisher;
+    private final Publisher publisher;
     private final ReservationService reservationService;
 
     public static class MessageTypes {
@@ -40,7 +37,7 @@ public class WorkflowProcessor {
 
         final var order = envelope.getPayload();
 
-        final Seats reservation = this.reservationService.reserve(
+        final var reservation = this.reservationService.reserve(
                 order.getId(),
                 order.getShowId(),
                 order.getSeats());

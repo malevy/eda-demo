@@ -23,7 +23,7 @@ public class ReservationService {
                   final String showId,
                   final List<String> seats) {
 
-        final Seats reservation = new Seats(orderId,
+        final var reservation = new Seats(orderId,
                 showId,
                 Seats.Statuses.RESERVED,
                 new ArrayList<>(seats));
