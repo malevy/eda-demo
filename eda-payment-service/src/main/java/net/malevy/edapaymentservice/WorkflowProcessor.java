@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class WorkflowProcessor {
 
-    private Publisher publisher;
+    private final Publisher publisher;
 
     public static class MessageTypes {
         public static final String PAYMENTACCEPTED_V1 = "ticketing.payment.accepted.v1";

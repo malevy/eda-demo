@@ -3,7 +3,6 @@ package net.malevy.edapaymentservice;
 import lombok.extern.slf4j.Slf4j;
 import net.malevy.edapaymentservice.messages.Envelope;
 import org.springframework.cloud.stream.messaging.Processor;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ public class Publisher {
 
     public void publish(final Envelope<?> envelope, String messageType) {
 
-        final Message message = MessageBuilder.withPayload(envelope)
+        final var message = MessageBuilder.withPayload(envelope)
                 .setHeader("topic", messageType)
                 .build();
 
