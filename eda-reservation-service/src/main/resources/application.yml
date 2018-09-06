@@ -1,3 +1,8 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+
 chaos:
   monkey:
     enabled: false

@@ -1,3 +1,8 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+
 spring:
   profiles:
     active: chaos-monkey
@@ -62,4 +67,3 @@ chaos:
       repository: true
       rest-controller: true
       service: true
-
