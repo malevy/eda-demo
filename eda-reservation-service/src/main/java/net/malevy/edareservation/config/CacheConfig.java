@@ -9,9 +9,9 @@ public class CacheConfig {
 
     @Bean
     public Config buildCacheConfig() {
+
         final var config = new Config();
-        final var  groupConfig = config.getGroupConfig();
-        groupConfig.setName("reservation-service-cache");
+        config.getGroupConfig().setName("reservation-service-cache");
         return config;
 
     }

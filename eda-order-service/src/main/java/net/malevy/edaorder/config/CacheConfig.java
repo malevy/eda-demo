@@ -11,8 +11,7 @@ public class CacheConfig {
     @Bean
     public Config buildCacheConfig() {
         Config config = new Config();
-        GroupConfig groupConfig = config.getGroupConfig();
-        groupConfig.setName("order-service-cache");
+        config.getGroupConfig().setName("order-service-cache");
         return config;
 
     }

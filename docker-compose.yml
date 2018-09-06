@@ -1,13 +1,31 @@
 # chaos_monkey_enabled will pick up the value from the
 # shell when 'docker-compose up' is executed
 
-version: '3'
+version: '3.2'
 services:
   rabbit:
     image: "rabbitmq:management"
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  order-cache-replica:
+    image:  hazelcast/hazelcast
+    volumes:
+    - type: "bind"
+      source: "./hazelcast"
+      target: "/opt/hazelcast/config_ext"
+    environment:
+      JAVA_OPTS: "-Dhazelcast.config=/opt/hazelcast/config_ext/hazelcast-order.xml"
+
+  reservation-cache-replica:
+    image:  hazelcast/hazelcast
+    volumes:
+      - type: "bind"
+        source: "./hazelcast"
+        target: "/opt/hazelcast/config_ext"
+    environment:
+      JAVA_OPTS: "-Dhazelcast.config=/opt/hazelcast/config_ext/hazelcast-reservation.xml"
 
   service-registry:
     build: ./eda-service-registry
@@ -25,6 +43,7 @@ services:
     depends_on:
       - rabbit
       - service-registry
+      - reservation-cache-replica
     environment:
       spring.rabbitmq.host: rabbit
       eureka.instance.hostname: service-registry
@@ -53,6 +72,7 @@ services:
     depends_on:
     - rabbit
     - service-registry
+    - order-cache-replica
     - reservation-service
     - payment-service
     environment:

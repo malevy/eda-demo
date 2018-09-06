@@ -2,8 +2,11 @@ chaos:
   monkey:
     enabled: false
     assaults:
+      exceptionsActive: true
       latency-active: true
-      kill-application-active: true
+      # the kill-application assult has to be false in order for the demo to work correctly.
+      # this service stores state between calls using a transient cache
+      kill-application-active: false
     watcher:
       service: true
       repository: true
