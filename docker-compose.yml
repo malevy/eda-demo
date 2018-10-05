@@ -29,14 +29,14 @@ services:
 
   service-registry:
     build: ./eda-service-registry
-    image: eda-service-registry:latest
+    image: eda-service-registry:1
     restart: always
     ports:
       - "8761:8761"
 
   reservation-service:
     build: ./eda-reservation-service
-    image: eda-reservation-service:latest
+    image: eda-reservation-service:1
     restart: always
     ports:
       - "8081:8080"
@@ -51,7 +51,7 @@ services:
 
   payment-service:
     build: ./eda-payment-service
-    image: eda-payment-service:latest
+    image: eda-payment-service:1
     restart: always
     ports:
     - "8082:8080"
@@ -65,7 +65,7 @@ services:
 
   order-service:
     build: ./eda-order-service
-    image: eda-order-service:latest
+    image: eda-order-service:1
     restart: always
     ports:
     - "8080:8080"
