@@ -19,7 +19,7 @@ class CreateOrderUsingRequestResponseDemo extends Simulation {
     .userAgentHeader("Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0")
 
   val createOrderScenario = scenario("CreateOrderSync")
-    .repeat(5) {
+    .repeat(1) {
       exec(
         http("post-order")
           .post("/orders/sync")

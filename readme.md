@@ -57,6 +57,10 @@ and launch a container with an instance of Gatling. There are two
 scripts. One will exercise the request/response path and the other 
 will challenge the eventing path
 
+on Windows
+
+    winpty bash ./run-gatling-container.sh
+
 #### Embracing chaos
 Netflix's Chaos Monkey has been integrated thanks to 
 [Chaos Monkey for Spring Book](https://guides.github.com/pdfs/markdown-cheatsheet-online.pdf)
