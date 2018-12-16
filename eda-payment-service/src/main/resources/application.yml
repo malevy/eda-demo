@@ -42,17 +42,6 @@ spring:
     password: guest
     virtual-host: /
 
-eureka:
-  instance:
-    hostname: localhost
-    prefer-ip-address: true
-  client:
-    enabled: true
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
-
 chaos:
   monkey:
     enabled: false

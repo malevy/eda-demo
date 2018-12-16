@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesBindin
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
@@ -14,6 +15,15 @@ public class UriConverter implements Converter<String, URI> {
     public URI convert(String s) {
         if (StringUtils.isEmpty(s)) return null;
 
-        return URI.create(s);
+        var uri = URI.create(s);
+        if (! uri.isAbsolute()) {
+            uri = UriComponentsBuilder
+                    .fromUri(uri)
+                    .scheme("http")
+                    .build()
+                    .toUri();
+        }
+
+        return uri;
     }
 }

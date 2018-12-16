@@ -65,6 +65,10 @@ to *true* prior to spinning up the containers.
 
     export chaos_monkey_enabled=true
 
+#### cleanup
+an easy way to remove all of the EDA images
+
+     docker rmi $(docker images --filter=reference="eda*" -q)
 
 
  

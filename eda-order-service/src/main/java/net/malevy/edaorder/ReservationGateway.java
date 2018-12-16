@@ -1,5 +1,6 @@
 package net.malevy.edaorder;
 
+import lombok.extern.slf4j.Slf4j;
 import net.malevy.edaorder.config.ExternalServicesProperties;
 import net.malevy.edaorder.messages.Seats;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class ReservationGateway {
 
     private final ExternalServicesProperties externalServicesProperties;
@@ -26,6 +28,8 @@ public class ReservationGateway {
                 .path("/seats/reserve")
                 .toUriString();
 
+        log.info("reserving seats at {}", reserveUrl);
+
         final var reservationResponse = this.restTemplate
                 .postForEntity(reserveUrl,reservationRequest,Seats.class);
 
@@ -38,6 +42,8 @@ public class ReservationGateway {
                 .path("/reservations/{id}/complete")
                 .build(Map.ofEntries(Map.entry("id", orderId)))
                 .toString();
+
+        log.info("assigning seats at {}", completeUrl);
 
         this.restTemplate.postForEntity(completeUrl, null, Seats.class);
 

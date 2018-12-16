@@ -27,40 +27,27 @@ services:
     environment:
       JAVA_OPTS: "-Dhazelcast.config=/opt/hazelcast/config_ext/hazelcast-reservation.xml"
 
-  service-registry:
-    build: ./eda-service-registry
-    image: eda-service-registry:1
-    restart: always
-    ports:
-      - "8761:8761"
-
   reservation-service:
     build: ./eda-reservation-service
     image: eda-reservation-service:1
     restart: always
-    ports:
-      - "8081:8080"
     depends_on:
       - rabbit
-      - service-registry
       - reservation-cache-replica
     environment:
+      server.port: 80
       spring.rabbitmq.host: rabbit
-      eureka.instance.hostname: service-registry
       chaos_monkey_enabled:
 
   payment-service:
     build: ./eda-payment-service
     image: eda-payment-service:1
     restart: always
-    ports:
-    - "8082:8080"
     depends_on:
     - rabbit
-    - service-registry
     environment:
+      server.port: 80
       spring.rabbitmq.host: rabbit
-      eureka.instance.hostname: service-registry
       chaos_monkey_enabled:
 
   order-service:
@@ -68,15 +55,16 @@ services:
     image: eda-order-service:1
     restart: always
     ports:
-    - "8080:8080"
+    - "8080:80"
     depends_on:
     - rabbit
-    - service-registry
     - order-cache-replica
     - reservation-service
     - payment-service
     environment:
+      server.port: 80
       spring.rabbitmq.host: rabbit
-      eureka.instance.hostname: service-registry
+      app_services_payment: http://payment-service
+      app_services_reservation: http://reservation-service
       chaos_monkey_enabled:
 
