@@ -1,0 +1,61 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: rabbitmq
+  labels:
+    sample: eda
+spec:
+  type: ClusterIP
+  selector:
+    app: rabbitmq
+  ports:
+    - name: amqp
+      targetPort: amqp
+      port: 5672
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: rabbitmq-management
+  labels:
+    sample: eda
+spec:
+  type: LoadBalancer
+  selector:
+    app: rabbitmq
+  ports:
+    - name: management
+      targetPort: management
+      port: 15672
+      protocol: TCP
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rabbitmq
+  labels:
+    sample: eda
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+        sample: eda
+    spec:
+      containers:
+        - name: rabbitmq
+          image: "rabbitmq:management"
+          ports:
+            - name: amqp
+              containerPort: 5672
+            - name: management
+              containerPort: 15672
+
+
+

@@ -1,0 +1,42 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: reservation-service
+  labels:
+    sample: eda
+spec:
+  type: ClusterIP
+  selector:
+    app: reservation-workload
+  ports:
+    - name: http
+      targetPort: server-port
+      port: 80
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: reservation-workload
+  labels:
+    sample: eda
+spec:
+  selector:
+    matchLabels:
+      app: reservation-workload
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: reservation-workload
+        sample: eda
+    spec:
+      containers:
+        - name: reservation-workload
+          image: eda-reservation-service:1
+          ports:
+            - name: server-port
+              containerPort: 8080
+          env:
+            - name: spring.rabbitmq.host
+              value: rabbitmq
