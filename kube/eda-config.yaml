@@ -1,0 +1,9 @@
+kind: ConfigMap
+apiVersion: v1
+data:
+  chaos.monkey.enabled: "false"
+metadata:
+  name: eda-config
+  labels:
+    sample: eda
+

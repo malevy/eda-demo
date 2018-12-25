@@ -20,6 +20,7 @@ metadata:
   name: payment-workload
   labels:
     sample: eda
+    class: workload
 spec:
   selector:
     matchLabels:
@@ -30,6 +31,9 @@ spec:
       labels:
         app: payment-workload
         sample: eda
+        class: workload
+      annotations:
+        recycle-trigger: "20181224"
     spec:
       containers:
         - name: payment-workload
@@ -40,3 +44,8 @@ spec:
           env:
             - name: spring.rabbitmq.host
               value: rabbitmq
+            - name: chaos_monkey_enabled
+              valueFrom:
+                configMapKeyRef:
+                  key: chaos.monkey.enabled
+                  name: eda-config

@@ -1,0 +1,5 @@
+spec:
+  template:
+    metadata:
+      annotations:
+        recycle-trigger: "20181224-4"

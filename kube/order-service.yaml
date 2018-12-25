@@ -20,6 +20,7 @@ metadata:
   name: order-workload
   labels:
     sample: eda
+    class: workload
 spec:
   selector:
     matchLabels:
@@ -30,6 +31,9 @@ spec:
       labels:
         app: order-workload
         sample: eda
+        class: workload
+      annotations:
+        recycle-trigger: "20181224"
     spec:
       containers:
         - name: order-workload
@@ -44,3 +48,8 @@ spec:
               value: http://payment-service
             - name: app_services_reservation
               value: http://reservation-service
+            - name: chaos_monkey_enabled
+              valueFrom:
+                configMapKeyRef:
+                  key: chaos.monkey.enabled
+                  name: eda-config
