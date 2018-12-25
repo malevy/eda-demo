@@ -1,0 +1,68 @@
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: order-cache
+  labels:
+    sample: eda
+    class: cache
+spec:
+  selector:
+    matchLabels:
+      app: order-cache
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: order-cache
+        sample: eda
+        class: cache
+    spec:
+      containers:
+        - name: order-cache
+          image: hazelcast/hazelcast:3.10.6
+          volumeMounts:
+            - mountPath: "/opt/hazelcast/config_ext"
+              name: config-volume
+          env:
+            - name: JAVA_OPTS
+              value: "-Dhazelcast.config=/opt/hazelcast/config_ext/hazelcast-order.xml"
+      volumes:
+        - name: config-volume
+          configMap:
+            name: hazelcast-config
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: reservation-cache
+  labels:
+    sample: eda
+    class: cache
+spec:
+  selector:
+    matchLabels:
+      app: reservation-cache
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: reservation-cache
+        sample: eda
+        class: cache
+    spec:
+      containers:
+        - name: reservation-cache
+          image: hazelcast/hazelcast:3.10.6
+          volumeMounts:
+            - mountPath: "/opt/hazelcast/config_ext"
+              name: config-volume
+          env:
+            - name: JAVA_OPTS
+              value: "-Dhazelcast.config=/opt/hazelcast/config_ext/hazelcast-reservation.xml"
+      volumes:
+        - name: config-volume
+          configMap:
+            name: hazelcast-config
+
