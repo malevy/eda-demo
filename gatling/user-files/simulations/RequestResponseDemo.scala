@@ -14,7 +14,7 @@ class CreateOrderUsingRequestResponseDemo extends Simulation {
   println(baseURL)
   
   val httpConf = http 
-    .baseURL(baseURL)
+    .baseUrl(baseURL)
     .acceptHeader("application/json")
     .userAgentHeader("Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0")
 
@@ -23,7 +23,7 @@ class CreateOrderUsingRequestResponseDemo extends Simulation {
       exec(
         http("post-order")
           .post("/orders/sync")
-          .body(StringBody("""{"showId":"456765","status":"pending","seats":["1A","1B","1C"]}""")).asJSON
+          .body(StringBody("""{"showId":"456765","status":"pending","seats":["1A","1B","1C"]}""")).asJson
           .check(status.is(201))
 
           // save off the location header
@@ -40,7 +40,7 @@ class CreateOrderUsingRequestResponseDemo extends Simulation {
     }
 
   setUp( 
-    createOrderScenario.inject(rampUsers(20) over (5 seconds))
+    createOrderScenario.inject(rampUsers(20) during (5 seconds))
   ).protocols(httpConf)
 }
 
