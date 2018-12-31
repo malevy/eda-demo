@@ -44,6 +44,8 @@ spec:
           env:
             - name: spring.rabbitmq.host
               value: rabbitmq
+            - name: chaos.monkey.assaults.level
+              value: 10 # attack each 10th request. the default is 5
             - name: chaos_monkey_enabled
               valueFrom:
                 configMapKeyRef:

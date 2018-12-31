@@ -10,7 +10,7 @@ services:
       - "15672:15672"
 
   order-cache-replica:
-    image:  hazelcast/hazelcast
+    image:  hazelcast/hazelcast:3.10.6
     volumes:
     - type: "bind"
       source: "./hazelcast"
@@ -19,7 +19,7 @@ services:
       JAVA_OPTS: "-Dhazelcast.config=/opt/hazelcast/config_ext/hazelcast-order.xml"
 
   reservation-cache-replica:
-    image:  hazelcast/hazelcast
+    image:  hazelcast/hazelcast:3.10.6
     volumes:
       - type: "bind"
         source: "./hazelcast"
@@ -37,7 +37,6 @@ services:
     environment:
       server.port: 80
       spring.rabbitmq.host: rabbit
-      chaos_monkey_enabled:
 
   payment-service:
     build: ./eda-payment-service
@@ -48,6 +47,7 @@ services:
     environment:
       server.port: 80
       spring.rabbitmq.host: rabbit
+      chaos.monkey.assaults.level: 10 # attack each 10th request. the default is 5
       chaos_monkey_enabled:
 
   order-service:
@@ -66,5 +66,4 @@ services:
       spring.rabbitmq.host: rabbit
       app_services_payment: http://payment-service
       app_services_reservation: http://reservation-service
-      chaos_monkey_enabled:
 

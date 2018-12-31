@@ -44,8 +44,3 @@ spec:
           env:
             - name: spring.rabbitmq.host
               value: rabbitmq
-            - name: chaos_monkey_enabled
-              valueFrom:
-                configMapKeyRef:
-                  key: chaos.monkey.enabled
-                  name: eda-config

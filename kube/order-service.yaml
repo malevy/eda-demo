@@ -48,8 +48,3 @@ spec:
               value: http://payment-service
             - name: app_services_reservation
               value: http://reservation-service
-            - name: chaos_monkey_enabled
-              valueFrom:
-                configMapKeyRef:
-                  key: chaos.monkey.enabled
-                  name: eda-config
