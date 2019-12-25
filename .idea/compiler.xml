@@ -6,10 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="eda-order" />
-        <module name="eda-payment-service" />
-        <module name="eda-reservation-service" />
         <module name="eda-service-registry" />
+        <module name="eda-order" />
+        <module name="eda-reservation-service" />
+        <module name="eda-payment-service" />
       </profile>
     </annotationProcessing>
   </component>
