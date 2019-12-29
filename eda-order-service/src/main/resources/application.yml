@@ -10,14 +10,6 @@ spring:
     name: eda-order
   cloud:
     stream:
-      rabbit:
-        bindings:
-          output:
-            producer:
-              # configure spring cloud stream to use the value of the topic header
-              # on the message as the topic when publishing.
-              routingKeyExpression: 'headers["topic"]'
-
       # the destination is the RMQ exchange while the group is the RMQ queue
       bindings:
         input:
