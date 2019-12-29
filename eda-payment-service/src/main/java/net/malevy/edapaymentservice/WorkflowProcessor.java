@@ -26,7 +26,7 @@ public class WorkflowProcessor {
         this.publisher = publisher;
     }
 
-    @StreamListener(target = Processor.INPUT, condition = "headers['topic']=='ticketing.seats.reserved.v1'")
+    @StreamListener(target = Processor.INPUT, condition = "headers['message-type']=='ticketing.seats.reserved.v1'")
     public void seatsReservedHandler(final @Payload Envelope<Seats> envelope) {
         log.info("action: received | messageId: {} | messageType: {} | orderId: {}",
                 envelope.getId(), envelope.getMessageType(), envelope.getPayload().getOrderId());

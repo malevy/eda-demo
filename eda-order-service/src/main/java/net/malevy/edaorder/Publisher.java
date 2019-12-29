@@ -25,9 +25,7 @@ public class Publisher {
         final var payload = new Envelope<>(MessageTypes.OrderCreated_v1, order);
 
         var message = MessageBuilder.withPayload(payload)
-                // spring cloud stream is configure to use the value of the topic header
-                // as the topic when publishing messages on the output channel
-                .setHeader("topic", payload.getMessageType())
+                .setHeader("message-type", payload.getMessageType())
                 .build();
 
         this.source.output().send(message);

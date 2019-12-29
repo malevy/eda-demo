@@ -30,7 +30,7 @@ public class WorkflowProcessor {
         this.reservationService = reservationService;
     }
 
-    @StreamListener(target = Processor.INPUT, condition = "headers['topic']=='ticketing.order.created.v1'")
+    @StreamListener(target = Processor.INPUT, condition = "headers['message-type']=='ticketing.order.created.v1'")
     public void orderCreatedHandler(final @Payload Envelope<Order> envelope) {
         log.info("action: received | messageId: {} | messageType: {} | orderId: {}",
                 envelope.getId(), envelope.getMessageType(), envelope.getPayload().getId());
@@ -50,7 +50,7 @@ public class WorkflowProcessor {
 
     }
 
-    @StreamListener(target = Processor.INPUT, condition = "headers['topic']=='ticketing.payment.accepted.v1'")
+    @StreamListener(target = Processor.INPUT, condition = "headers['message-type']=='ticketing.payment.accepted.v1'")
     public void paymentApprovedHandler(final @Payload Envelope<PaymentApproved> envelope) {
         log.info("action: received | messageId: {} | messageType: {} | orderId: {}",
                 envelope.getId(), envelope.getMessageType(), envelope.getPayload().getOrderId());

@@ -21,7 +21,7 @@ public class Consumer {
         this.countAggregator = countAggregator;
     }
 
-    @StreamListener(target = Processor.INPUT, condition = "headers['topic']=='ticketing.seats.assigned.v1'")
+    @StreamListener(target = Processor.INPUT, condition = "headers['message-type']=='ticketing.seats.assigned.v1'")
     public void seatsAssignedHandlerHandler(final @Payload Envelope<Seats> envelope) {
         log.info("action: received | messageId: {} | messageType: {} | orderId: {}",
                 envelope.getId(), envelope.getMessageType(), envelope.getPayload().getOrderId());
