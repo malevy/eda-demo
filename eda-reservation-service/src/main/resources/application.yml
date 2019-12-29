@@ -20,7 +20,7 @@ chaos:
 
 spring:
   profiles:
-    active: chaos-monkey
+    active: chaos-monkey, rabbitmq
   application:
     name: eda-reservation
   cloud:
@@ -30,19 +30,27 @@ spring:
         input:
           destination: ticketing-events
           group: reservations-processor
-          binder: local_rabbit
         output:
           destination: ticketing-events
-          binder: local_rabbit
 
-      binders:
-        local_rabbit:
-          type: rabbit
+---
 
+spring:
+  profiles: rabbitmq
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
     virtual-host: /
+  cloud:
+    stream:
+      bindings:
+        input:
+          binder: local_rabbit
+        output:
+          binder: local_rabbit
+      binders:
+        local_rabbit:
+          type: rabbit
 

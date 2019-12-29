@@ -7,7 +7,6 @@ content-type: application/json
 accept: application/json
 
 {
-  "id":"00001",
   "showId":"456765",
   "seats":["1A","1B","1C"]
 }

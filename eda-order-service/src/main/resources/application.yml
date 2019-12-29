@@ -3,39 +3,6 @@ server:
     whitelabel:
       enabled: false
 
-spring:
-  profiles:
-    active: chaos-monkey
-  application:
-    name: eda-order
-  cloud:
-    stream:
-      # the destination is the RMQ exchange while the group is the RMQ queue
-      bindings:
-        input:
-          destination: ticketing-events
-          group: order-processor
-          binder: local_rabbit
-        output:
-          destination: ticketing-events
-          binder: local_rabbit
-
-      binders:
-        local_rabbit:
-          type: rabbit
-
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    virtual-host: /
-
-app:
-  services:
-    payment: http://eda-payment
-    reservation: http://eda-reservation
-
 chaos:
   monkey:
     enabled: false
@@ -48,3 +15,44 @@ chaos:
       repository: true
       rest-controller: true
       service: true
+
+spring:
+  profiles:
+    active: chaos-monkey
+  application:
+    name: eda-order
+  cloud:
+    stream:
+      # the destination is the RMQ exchange while the group is the RMQ queue
+      bindings:
+        input:
+          destination: ticketing-events
+          group: order-processor
+        output:
+          destination: ticketing-events
+
+app:
+  services:
+    payment: http://eda-payment
+    reservation: http://eda-reservation
+
+
+---
+spring:
+  profiles: rabbitmq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+  cloud:
+    stream:
+      bindings:
+        input:
+          binder: local_rabbit
+        output:
+          binder: local_rabbit
+      binders:
+        local_rabbit:
+          type: rabbit
