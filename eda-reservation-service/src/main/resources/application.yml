@@ -33,8 +33,18 @@ spring:
         output:
           destination: ticketing-events
 
----
+    # disable azure servicebus
+    azure:
+      servicebus:
+        enabled: false
 
+app:
+  services:
+    payment: http://eda-payment
+    reservation: http://eda-reservation
+
+---
+# the destination is the RMQ exchange while the group is the RMQ queue
 spring:
   profiles: rabbitmq
   rabbitmq:
@@ -45,12 +55,23 @@ spring:
     virtual-host: /
   cloud:
     stream:
-      bindings:
-        input:
-          binder: local_rabbit
-        output:
-          binder: local_rabbit
-      binders:
-        local_rabbit:
-          type: rabbit
+      default-binder: rabbit
 
+---
+# the destination is the Azure Servicebus Topic and the group is the Subscription
+# binder properties: https://github.com/Microsoft/spring-cloud-azure/tree/master/spring-cloud-azure-stream-binder/spring-cloud-azure-servicebus-topic-stream-binder
+spring:
+  profiles: azure-topic
+  cloud:
+    stream:
+      servicebus:
+        topic:
+          bindings:
+            input:
+              consumer:
+                checkpoint-mode: RECORD
+      default-binder: servicebus-topic
+    azure:
+      servicebus:
+        enabled: true
+        connection-string:

@@ -38,6 +38,12 @@
             <version>3.0.1.RELEASE</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.microsoft.azure/spring-cloud-azure-servicebus-topic-stream-binder -->
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>spring-cloud-azure-servicebus-topic-stream-binder</artifactId>
+            <version>1.2.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>

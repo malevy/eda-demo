@@ -37,6 +37,8 @@ services:
     environment:
       server.port: 80
       spring.rabbitmq.host: rabbit
+      spring_profiles_active: ${active_profile}
+      spring.cloud.azure.servicebus.connection-string: ${azure_topic_connectstring}
 
   payment-service:
     build: ./eda-payment-service
@@ -49,6 +51,8 @@ services:
       spring.rabbitmq.host: rabbit
       chaos.monkey.assaults.level: 10 # attack each 10th request. the default is 5
       chaos_monkey_enabled:
+      spring_profiles_active: ${active_profile}
+      spring.cloud.azure.servicebus.connection-string: ${azure_topic_connectstring}
 
   order-service:
     build: ./eda-order-service
@@ -66,4 +70,6 @@ services:
       spring.rabbitmq.host: rabbit
       app_services_payment: http://payment-service
       app_services_reservation: http://reservation-service
+      spring_profiles_active: ${active_profile}
+      spring.cloud.azure.servicebus.connection-string: ${azure_topic_connectstring}
 
