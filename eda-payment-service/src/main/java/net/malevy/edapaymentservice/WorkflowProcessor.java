@@ -5,9 +5,8 @@ import net.malevy.edapaymentservice.messages.Envelope;
 import net.malevy.edapaymentservice.messages.PaymentApproved;
 import net.malevy.edapaymentservice.messages.Seats;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Processor;
-import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.context.annotation.Bean;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,8 +25,17 @@ public class WorkflowProcessor {
         this.publisher = publisher;
     }
 
-    @StreamListener(target = Processor.INPUT, condition = "headers['message-type']=='ticketing.seats.reserved.v1'")
-    public void seatsReservedHandler(final @Payload Envelope<Seats> envelope) {
+    @Bean
+    public java.util.function.Consumer<Message<Envelope<Seats>>> paymentProcessor() {
+        return message -> {
+            String messageType = (String) message.getHeaders().get("message-type");
+            if ("ticketing.seats.reserved.v1".equals(messageType)) {
+                seatsReservedHandler(message.getPayload());
+            }
+        };
+    }
+
+    private void seatsReservedHandler(final Envelope<Seats> envelope) {
         log.info("action: received | messageId: {} | messageType: {} | orderId: {}",
                 envelope.getId(), envelope.getMessageType(), envelope.getPayload().getOrderId());
 
@@ -46,7 +54,6 @@ public class WorkflowProcessor {
         this.publisher.publish(paymentApprovedEvent, MessageTypes.PAYMENTACCEPTED_V1);
         log.info("action: publishing | messageId: {} | messageType: {} | orderId: {}",
                 paymentApprovedEvent.getId(), paymentApprovedEvent.getMessageType(), seats.getOrderId());
-
     }
 
 }

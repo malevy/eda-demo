@@ -2,18 +2,17 @@ package net.malevy.edapaymentservice;
 
 import lombok.extern.slf4j.Slf4j;
 import net.malevy.edapaymentservice.messages.Envelope;
-import org.springframework.cloud.stream.messaging.Processor;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class Publisher {
-    private final Processor processor;
+    private final StreamBridge streamBridge;
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    public Publisher(final Processor processor) {
-        this.processor = processor;
+    public Publisher(final StreamBridge streamBridge) {
+        this.streamBridge = streamBridge;
     }
 
     public void publish(final Envelope<?> envelope, String messageType) {
@@ -22,7 +21,7 @@ public class Publisher {
                 .setHeader("message-type", messageType)
                 .build();
 
-        this.processor.output().send(message);
+        this.streamBridge.send("paymentPublisher-out-0", message);
 
     }
 }

@@ -101,7 +101,7 @@ public class OrderController {
     @GetMapping("/orders/{id}")
     public Mono<ResponseEntity<?>> fetchOrder(@PathVariable final String id) {
         log.info("fetching order {}", id);
-        if (StringUtils.isEmpty(id)) return Mono.just(
+        if (StringUtils.hasText(id)) return Mono.just(
                 ResponseEntity.badRequest().body("missing ID")
         );
 

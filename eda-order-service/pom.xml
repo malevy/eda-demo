@@ -3,8 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.malevy</groupId>
-    <artifactId>eda-order</artifactId>
+    <artifactId>eda-order-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -14,7 +13,7 @@
     <parent>
         <groupId>net.malevy</groupId>
         <artifactId>eda</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>2.0</version>
     </parent>
 
     <dependencies>
@@ -23,25 +22,19 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-stream-rabbit -->
+        <!-- Spring Cloud Stream RabbitMQ Binder -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
-            <version>3.0.1.RELEASE</version>
+            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.microsoft.azure/spring-cloud-azure-servicebus-topic-stream-binder -->
         <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>spring-cloud-azure-servicebus-topic-stream-binder</artifactId>
-            <version>1.2.0</version>
+            <groupId>com.azure.spring</groupId>
+            <artifactId>spring-cloud-azure-stream-binder-servicebus</artifactId>
+            <version>5.22.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
@@ -52,26 +45,13 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>3.10.4</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/de.codecentric/chaos-monkey-spring-boot -->
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>chaos-monkey-spring-boot</artifactId>
-            <version>2.0.0</version>
+            <version>5.5.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>2.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
         </dependency>
 
         <dependency>
@@ -88,6 +68,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream-test-support</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
         </dependency>
 
     </dependencies>

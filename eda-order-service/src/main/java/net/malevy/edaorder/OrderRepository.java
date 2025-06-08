@@ -15,7 +15,6 @@ public class OrderRepository {
 
     private final CacheManager cacheManager;
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public OrderRepository(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }
@@ -26,7 +25,7 @@ public class OrderRepository {
         final var mapper = new ModelMapper();
         final var clone = mapper.map(order, Order.class);
 
-        if (StringUtils.isEmpty(clone.getId())) {
+        if (StringUtils.hasText(clone.getId())) {
             clone.setId(UUID.randomUUID().toString());
             clone.setStatus(Order.Statuses.PENDING);
         }

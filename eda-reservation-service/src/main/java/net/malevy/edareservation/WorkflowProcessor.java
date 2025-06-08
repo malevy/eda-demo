@@ -2,9 +2,8 @@ package net.malevy.edareservation;
 
 import lombok.extern.slf4j.Slf4j;
 import net.malevy.edareservation.messages.*;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Processor;
-import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.context.annotation.Bean;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +21,6 @@ public class WorkflowProcessor {
 
     }
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public WorkflowProcessor(final Publisher publisher,
                              final ReservationService reservationService) {
 
@@ -30,8 +28,19 @@ public class WorkflowProcessor {
         this.reservationService = reservationService;
     }
 
-    @StreamListener(target = Processor.INPUT, condition = "headers['message-type']=='ticketing.order.created.v1'")
-    public void orderCreatedHandler(final @Payload Envelope<Order> envelope) {
+    @Bean
+    public java.util.function.Consumer<Message<Object>> reservationProcessor() {
+        return message -> {
+            String messageType = (String) message.getHeaders().get("message-type");
+            if ("ticketing.order.created.v1".equals(messageType)) {
+                orderCreatedHandler((Envelope<Order>) message.getPayload());
+            } else if ("ticketing.payment.accepted.v1".equals(messageType)) {
+                paymentApprovedHandler((Envelope<PaymentApproved>) message.getPayload());
+            }
+        };
+    }
+
+    private void orderCreatedHandler(final Envelope<Order> envelope) {
         log.info("action: received | messageId: {} | messageType: {} | orderId: {}",
                 envelope.getId(), envelope.getMessageType(), envelope.getPayload().getId());
 
@@ -47,24 +56,22 @@ public class WorkflowProcessor {
         this.publisher.publish(seatsReservedEvent, MessageTypes.SEATSRESERVED_V1);
         log.info("action: publishing | messageId: {} | messageType: {} | orderId: {}",
             seatsReservedEvent.getId(), seatsReservedEvent.getMessageType(), order.getId());
-
     }
 
-    @StreamListener(target = Processor.INPUT, condition = "headers['message-type']=='ticketing.payment.accepted.v1'")
-    public void paymentApprovedHandler(final @Payload Envelope<PaymentApproved> envelope) {
+    private void paymentApprovedHandler(final Envelope<PaymentApproved> envelope) {
         log.info("action: received | messageId: {} | messageType: {} | orderId: {}",
                 envelope.getId(), envelope.getMessageType(), envelope.getPayload().getOrderId());
 
         final var payment = envelope.getPayload();
 
         this.reservationService.completeReservation(payment.getOrderId());
-        final var seats = this.reservationService.fetch(payment.getOrderId()).get();
+        this.reservationService.fetch(payment.getOrderId()).ifPresent(seats -> {
+            final Envelope<Seats> seatsReservedEvent = new Envelope<>(MessageTypes.SEATSASSIGNED_V1, seats);
 
-        final Envelope<Seats> seatsReservedEvent = new Envelope<>(MessageTypes.SEATSASSIGNED_V1, seats);
-
-        this.publisher.publish(seatsReservedEvent, MessageTypes.SEATSASSIGNED_V1);
-        log.info("action: publishing | messageId: {} | messageType: {} | orderId: {}",
-                seatsReservedEvent.getId(), seatsReservedEvent.getMessageType(), seats.getOrderId());
+            this.publisher.publish(seatsReservedEvent, MessageTypes.SEATSASSIGNED_V1);
+            log.info("action: publishing | messageId: {} | messageType: {} | orderId: {}",
+                    seatsReservedEvent.getId(), seatsReservedEvent.getMessageType(), seats.getOrderId());
+        });
 
     }
 

@@ -12,7 +12,6 @@ public class ReservationRepository {
 
     private final CacheManager cacheManager;
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public ReservationRepository(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }

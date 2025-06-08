@@ -3,9 +3,8 @@ package net.malevy.edaorder;
 import lombok.extern.slf4j.Slf4j;
 import net.malevy.edaorder.messages.Envelope;
 import net.malevy.edaorder.messages.Seats;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Processor;
-import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.context.annotation.Bean;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,8 +20,17 @@ public class Consumer {
         this.countAggregator = countAggregator;
     }
 
-    @StreamListener(target = Processor.INPUT, condition = "headers['message-type']=='ticketing.seats.assigned.v1'")
-    public void seatsAssignedHandlerHandler(final @Payload Envelope<Seats> envelope) {
+    @Bean
+    public java.util.function.Consumer<Message<Envelope<Seats>>> orderProcessor() {
+        return message -> {
+            String messageType = (String) message.getHeaders().get("message-type");
+            if ("ticketing.seats.assigned.v1".equals(messageType)) {
+                seatsAssignedHandler(message.getPayload());
+            }
+        };
+    }
+
+    private void seatsAssignedHandler(final Envelope<Seats> envelope) {
         log.info("action: received | messageId: {} | messageType: {} | orderId: {}",
                 envelope.getId(), envelope.getMessageType(), envelope.getPayload().getOrderId());
 
@@ -36,7 +44,6 @@ public class Consumer {
             countAggregator.recordCompleted();
             log.info("action: order-completed | orderId: {}", order.getId());
         });
-
     }
 
 

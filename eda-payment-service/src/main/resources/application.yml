@@ -3,32 +3,21 @@ server:
     whitelabel:
       enabled: false
 
-chaos:
-  monkey:
-    enabled: false
-    assaults:
-      exceptions-active: false
-      kill-application-active: true
-      latency-active: true
-    watcher:
-      component: false
-      repository: true
-      rest-controller: true
-      service: true
-
 spring:
   profiles:
-    active: chaos-monkey
+    active: rabbitmq
   application:
     name: eda-payment
   cloud:
+    function:
+      definition: paymentProcessor
     stream:
       # the destination is the RMQ exchange while the group is the RMQ queue
       bindings:
-        input:
+        paymentProcessor-in-0:
           destination: ticketing-events
           group: payment-processor
-        output:
+        paymentPublisher-out-0:
           destination: ticketing-events
 
     # disable azure servicebus
@@ -59,7 +48,7 @@ spring:
       servicebus:
         topic:
           bindings:
-            input:
+            paymentProcessor-in-0:
               consumer:
                 checkpoint-mode: RECORD
       default-binder: servicebus-topic

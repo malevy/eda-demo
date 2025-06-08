@@ -3,34 +3,22 @@ server:
     whitelabel:
       enabled: false
 
-chaos:
-  monkey:
-    enabled: false
-    assaults:
-      exceptionsActive: true
-      latency-active: true
-      # the kill-application assult has to be false in order for the demo to work correctly.
-      # this service stores state between calls using a transient cache
-      kill-application-active: false
-    watcher:
-      service: true
-      repository: true
-      rest-controller: true
-      component: false
 
 spring:
   profiles:
-    active: chaos-monkey, rabbitmq
+    active: rabbitmq
   application:
     name: eda-reservation
   cloud:
+    function:
+      definition: reservationProcessor
     stream:
       # the destination is the RMQ exchange while the group is the RMQ queue
       bindings:
-        input:
+        reservationProcessor-in-0:
           destination: ticketing-events
           group: reservations-processor
-        output:
+        reservationPublisher-out-0:
           destination: ticketing-events
 
     # disable azure servicebus
@@ -67,7 +55,7 @@ spring:
       servicebus:
         topic:
           bindings:
-            input:
+            reservationProcessor-in-0:
               consumer:
                 checkpoint-mode: RECORD
       default-binder: servicebus-topic

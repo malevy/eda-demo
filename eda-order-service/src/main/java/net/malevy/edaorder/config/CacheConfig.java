@@ -1,7 +1,6 @@
 package net.malevy.edaorder.config;
 
 import com.hazelcast.config.Config;
-import com.hazelcast.config.GroupConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +10,7 @@ public class CacheConfig {
     @Bean
     public Config buildCacheConfig() {
         Config config = new Config();
-        config.getGroupConfig().setName("order-service-cache");
+        config.setClusterName("order-service-cache");
         return config;
 
     }

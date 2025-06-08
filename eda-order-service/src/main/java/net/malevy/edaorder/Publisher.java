@@ -2,7 +2,7 @@ package net.malevy.edaorder;
 
 import lombok.extern.slf4j.Slf4j;
 import net.malevy.edaorder.messages.Envelope;
-import org.springframework.cloud.stream.messaging.Source;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +14,10 @@ public class Publisher {
         public static final String OrderCreated_v1 = "ticketing.order.created.v1";
     }
 
-    private final Source source;
+    private final StreamBridge streamBridge;
 
-    public Publisher(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") final Source source) {
-        this.source = source;
+    public Publisher(final StreamBridge streamBridge) {
+        this.streamBridge = streamBridge;
     }
 
     public void orderCreated(Order order) {
@@ -28,7 +28,7 @@ public class Publisher {
                 .setHeader("message-type", payload.getMessageType())
                 .build();
 
-        this.source.output().send(message);
+        this.streamBridge.send("orderPublisher-out-0", message);
 
         log.info("action: publish | messageId: {} | messageType: {}", payload.getId(), payload.getMessageType());
     }

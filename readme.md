@@ -86,14 +86,6 @@ on Windows
 
     winpty bash ./run-gatling-container.sh
 
-#### Embracing chaos
-Netflix's Chaos Monkey has been integrated thanks to 
-[Chaos Monkey for Spring Book](https://guides.github.com/pdfs/markdown-cheatsheet-online.pdf)
-by CodeCentric. It can be activated by setting the environment variable *chaos_monkey_enabled* 
-to *true* prior to spinning up the containers.
-
-    export chaos_monkey_enabled=true
-
 #### cleanup
 deleting the Azure Resource Group is a quick and easy way to release all of the resources that 
 were created within Azure.
