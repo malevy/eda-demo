@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
-            <version>3.10.4</version>
+            <version>5.3.8</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.hazelcast/hazelcast -->

@@ -2,6 +2,7 @@ package net.malevy.edaorder;
 
 import lombok.extern.slf4j.Slf4j;
 import net.malevy.edaorder.messages.Envelope;
+import net.malevy.edaorder.messages.Order;
 import net.malevy.edaorder.messages.Seats;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
@@ -21,11 +22,13 @@ public class Consumer {
     }
 
     @Bean
-    public java.util.function.Consumer<Message<Envelope<Seats>>> orderProcessor() {
+    public java.util.function.Consumer<Message<Envelope<Seats>>> seatEventProcessor() {
         return message -> {
             String messageType = (String) message.getHeaders().get("message-type");
             if ("ticketing.seats.assigned.v1".equals(messageType)) {
                 seatsAssignedHandler(message.getPayload());
+            } else {
+                log.error("unexpected message of type {}", messageType);
             }
         };
     }

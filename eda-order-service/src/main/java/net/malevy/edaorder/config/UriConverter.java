@@ -13,7 +13,7 @@ import java.net.URI;
 public class UriConverter implements Converter<String, URI> {
     @Override
     public URI convert(String s) {
-        if (StringUtils.hasText(s)) return null;
+        if (!StringUtils.hasText(s)) return null;
 
         var uri = URI.create(s);
         if (! uri.isAbsolute()) {

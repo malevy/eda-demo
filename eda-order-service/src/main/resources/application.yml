@@ -11,14 +11,14 @@ spring:
     name: eda-order
   cloud:
     function:
-      definition: orderProcessor
+      definition: seatEventProcessor
     stream:
       bindings:
-        orderProcessor-in-0:
-          destination: ticketing-events
+        seatEventProcessor-in-0:
+          destination: seats-events
           group: order-processor
         orderPublisher-out-0:
-          destination: ticketing-events
+          destination: order-events
 
     # disable azure servicebus
     azure:

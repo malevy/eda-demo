@@ -1,11 +1,11 @@
 package net.malevy.edaorder;
 
 import lombok.extern.slf4j.Slf4j;
+import net.malevy.edaorder.messages.Order;
 import net.malevy.edaorder.messages.Seats;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
@@ -101,7 +101,7 @@ public class OrderController {
     @GetMapping("/orders/{id}")
     public Mono<ResponseEntity<?>> fetchOrder(@PathVariable final String id) {
         log.info("fetching order {}", id);
-        if (StringUtils.hasText(id)) return Mono.just(
+        if (!StringUtils.hasText(id)) return Mono.just(
                 ResponseEntity.badRequest().body("missing ID")
         );
 

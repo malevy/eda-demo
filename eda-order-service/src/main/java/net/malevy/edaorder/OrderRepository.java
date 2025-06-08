@@ -1,5 +1,6 @@
 package net.malevy.edaorder;
 
+import net.malevy.edaorder.messages.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -25,7 +26,7 @@ public class OrderRepository {
         final var mapper = new ModelMapper();
         final var clone = mapper.map(order, Order.class);
 
-        if (StringUtils.hasText(clone.getId())) {
+        if (!StringUtils.hasText(clone.getId())) {
             clone.setId(UUID.randomUUID().toString());
             clone.setStatus(Order.Statuses.PENDING);
         }

@@ -2,6 +2,7 @@ package net.malevy.edaorder;
 
 import lombok.extern.slf4j.Slf4j;
 import net.malevy.edaorder.messages.Envelope;
+import net.malevy.edaorder.messages.Order;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
