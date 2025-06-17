@@ -29,10 +29,11 @@ public class PaymentController {
         return Mono.just(ResponseEntity.ok(approvedMessage));
     }
 
+    @Value
+    static class AcceptRequestBody {
+        public String orderId;
+        public String showId;
+    }
 }
 
-@Value
-class AcceptRequestBody {
-    public String orderId;
-    public String showId;
-}
+

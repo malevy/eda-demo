@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:21-alpine
 ADD ./target/eda-service-registry-0.0.1-SNAPSHOT.jar /bin
 WORKDIR /bin
 ENTRYPOINT ["java", "-jar", "/bin/eda-service-registry-0.0.1-SNAPSHOT.jar"]

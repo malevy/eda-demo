@@ -19,7 +19,6 @@ public class WorkflowProcessor {
         public static final String PAYMENTACCEPTED_V1 = "ticketing.payment.accepted.v1";
     }
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public WorkflowProcessor(final Publisher publisher) {
 
         this.publisher = publisher;

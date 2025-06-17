@@ -15,10 +15,10 @@ spring:
     stream:
       bindings:
         seatEventProcessor-in-0:
-          destination: seats-events
+          destination: ticketing-event
           group: order-processor
         orderPublisher-out-0:
-          destination: order-events
+          destination: ticketing-event
 
     # disable azure servicebus
     azure:
@@ -46,6 +46,14 @@ spring:
   cloud:
     stream:
       default-binder: rabbit
+      rabbit:
+        bindings:
+          seatEventProcessor-in-0:
+            consumer:
+              binding-routing-key: ticketing.seats.assigned.v1
+          orderPublisher-out-0:
+            producer:
+              routing-key-expression: headers['message-type']
 
 ---
 # the destination is the Azure Servicebus Topic and the group is the Subscription

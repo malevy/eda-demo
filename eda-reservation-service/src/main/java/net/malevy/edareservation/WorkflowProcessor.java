@@ -36,6 +36,8 @@ public class WorkflowProcessor {
                 orderCreatedHandler((Envelope<Order>) message.getPayload());
             } else if ("ticketing.payment.accepted.v1".equals(messageType)) {
                 paymentApprovedHandler((Envelope<PaymentApproved>) message.getPayload());
+            } else {
+                log.warn("Unknown message type: {}", messageType);
             }
         };
     }

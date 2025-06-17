@@ -11,7 +11,7 @@ public class CacheConfig {
     public Config buildCacheConfig() {
 
         final var config = new Config();
-        config.getGroupConfig().setName("reservation-service-cache");
+        config.setClusterName("reservation-service-cache");
         return config;
 
     }

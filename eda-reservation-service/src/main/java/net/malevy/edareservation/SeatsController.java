@@ -48,11 +48,12 @@ public class SeatsController {
         return Mono.just(response);
     }
 
+    @Value
+    static public class ReserveRequest {
+        public String orderId;
+        public String showId;
+        public List<String> seats;
+    }
+
 }
 
-@Value
-class ReserveRequest {
-    public String orderId;
-    public String showId;
-    public List<String> seats;
-}

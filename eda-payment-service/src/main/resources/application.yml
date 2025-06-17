@@ -15,10 +15,10 @@ spring:
       # the destination is the RMQ exchange while the group is the RMQ queue
       bindings:
         paymentProcessor-in-0:
-          destination: ticketing-events
+          destination: ticketing-event
           group: payment-processor
         paymentPublisher-out-0:
-          destination: ticketing-events
+          destination: ticketing-event
 
     # disable azure servicebus
     azure:
@@ -27,7 +27,9 @@ spring:
 
 ---
 spring:
-  profiles: rabbitmq
+  config:
+    activate:
+      on-profile: rabbitmq
   rabbitmq:
     host: localhost
     port: 5672
@@ -37,12 +39,23 @@ spring:
   cloud:
     stream:
       default-binder: rabbit
+      rabbit:
+        bindings:
+          paymentProcessor-in-0:
+            consumer:
+              binding-routing-key: ticketing.seats.reserved.v1
+          paymentPublisher-out-0:
+            producer:
+              routing-key-expression: headers['message-type']
+
 
 ---
 # the destination is the Azure Servicebus Topic and the group is the Subscription
 # binder properties: https://github.com/Microsoft/spring-cloud-azure/tree/master/spring-cloud-azure-stream-binder/spring-cloud-azure-servicebus-topic-stream-binder
 spring:
-  profiles: azure-topic
+  config:
+    activate:
+      on-profile: azure-topic
   cloud:
     stream:
       servicebus:

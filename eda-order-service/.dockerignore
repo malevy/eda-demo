@@ -2,8 +2,3 @@
 .*
 *.iml
 mvn*.*
-pom.xml
-src
-target
-!target/*.jar
-
