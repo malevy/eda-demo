@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Mono;
 
 @RestController
 @Slf4j
@@ -33,12 +32,12 @@ public class OrderController {
     }
 
     @PostMapping("/orders/sync")
-    public Mono<ResponseEntity<?>> createOrderSync(final @RequestBody Order order,
+    public ResponseEntity<?> createOrderSync(final @RequestBody Order order,
                                                final UriComponentsBuilder uriComponentsBuilder) {
 
-        if (null == order) return Mono.just( ResponseEntity
+        if (null == order) return ResponseEntity
                 .badRequest()
-                .body("no order was supplied"));
+                .body("no order was supplied");
 
         final var committedOrder = orderRepository.save(order);
         countAggregator.recordCreated();
@@ -66,21 +65,18 @@ public class OrderController {
         this.orderRepository.save(committedOrder);
         countAggregator.recordCompleted();
 
-        final var response = ResponseEntity
+        return ResponseEntity
                 .created(uriComponentsBuilder.build().toUri())
                 .body(committedOrder);
-
-        return Mono.just(response);
-
     }
 
     @PostMapping("/orders")
-    public Mono<ResponseEntity<?>> createOrder(final @RequestBody Order order,
+    public ResponseEntity<?> createOrder(final @RequestBody Order order,
                                                final UriComponentsBuilder uriComponentsBuilder) {
 
-        if (null == order) return Mono.just( ResponseEntity
+        if (null == order) return ResponseEntity
                 .badRequest()
-                .body("no order was supplied"));
+                .body("no order was supplied");
 
         final Order committedOrder = orderRepository.save(order);
         countAggregator.recordCreated();
@@ -95,36 +91,32 @@ public class OrderController {
 
         publisher.orderCreated(committedOrder);
 
-        return Mono.just(response);
+        return response;
     }
 
     @GetMapping("/orders/{id}")
-    public Mono<ResponseEntity<?>> fetchOrder(@PathVariable final String id) {
+    public ResponseEntity<?> fetchOrder(@PathVariable("id") final String id) {
         log.info("fetching order {}", id);
-        if (!StringUtils.hasText(id)) return Mono.just(
-                ResponseEntity.badRequest().body("missing ID")
-        );
+        if (!StringUtils.hasText(id)) return ResponseEntity.badRequest().body("missing ID");
 
-        var response = orderRepository.getById(id)
+        return orderRepository.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-
-        return Mono.just(response);
     }
 
     @GetMapping("/orders/counts")
-    public Mono<ResponseEntity<?>> fetchCounts() {
-        log.info("fetching order statuc count");
+    public ResponseEntity<?> fetchCounts() {
+        log.info("fetching order status count");
 
-        return Mono.just(ResponseEntity.ok(countAggregator.getCounts()));
+        return ResponseEntity.ok(countAggregator.getCounts());
     }
 
     @DeleteMapping("/orders/counts")
-    public Mono<ResponseEntity<?>> clearCounts() {
+    public ResponseEntity<?> clearCounts() {
         log.info("clearing counts");
         countAggregator.reset();
 
-        return Mono.just(ResponseEntity.ok("counts have been reset"));
+        return ResponseEntity.ok("counts have been reset");
     }
 
 }

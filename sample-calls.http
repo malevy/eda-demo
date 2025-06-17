@@ -1,7 +1,3 @@
-GET http://localhost:8080/actuator/health
-
-###
-
 POST http://localhost:8080/orders
 content-type: application/json
 accept: application/json
@@ -13,7 +9,7 @@ accept: application/json
 
 ###
 
-GET http://localhost:8080/orders/00001
+GET http://localhost:8080/orders/41aa180a-c3b1-4e81-a1d1-2f3af5f8b48b
 accept: application/json
 
 
@@ -23,7 +19,7 @@ content-type: application/json
 accept: application/json
 
 {
-  "orderId":"00001",
+  "orderId":"41aa180a-c3b1-4e81-a1d1-2f3af5f8b48b",
   "showId":"456765"
 }
 
@@ -33,14 +29,14 @@ content-type: application/json
 accept: application/json
 
 {
-  "orderId":"00001",
+  "orderId":"41aa180a-c3b1-4e81-a1d1-2f3af5f8b48b",
   "showId":"456765",
   "seats":["1A","1B","1C"]
 }
 
 ###
 
-POST http://localhost:8080/reservations/00001/complete
+POST http://localhost:8080/reservations/41aa180a-c3b1-4e81-a1d1-2f3af5f8b48b/complete
 accept: application/json
 
 

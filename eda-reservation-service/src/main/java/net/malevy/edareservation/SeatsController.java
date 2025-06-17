@@ -3,7 +3,6 @@ package net.malevy.edareservation;
 import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -17,35 +16,36 @@ public class SeatsController {
     }
 
     @PostMapping("/seats/reserve")
-    public Mono<ResponseEntity<?>> reserve(final @RequestBody ReserveRequest request) {
+    public ResponseEntity<?> reserve(final @RequestBody ReserveRequest request) {
 
         final var reservation = this.reservationService.reserve(request.orderId, request.showId, request.seats);
 
-        return Mono.just(ResponseEntity.ok(reservation));
+        return ResponseEntity.ok(reservation);
     }
 
     @PostMapping("/reservations/{id}/complete")
-    public Mono<ResponseEntity<?>> complete(final @PathVariable String id) {
+    public ResponseEntity<?> complete(final @PathVariable("id") String id) {
 
         try {
             this.reservationService.completeReservation(id);
-            return Mono.just(ResponseEntity.ok(this.fetchReservation(id)));
+            final var reservation = this.reservationService.fetch(id);
+            return reservation
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
         }
         catch (IllegalStateException ise) {
-            return Mono.just(ResponseEntity.notFound().build());
+            return ResponseEntity.notFound().build();
         }
 
     }
 
     @GetMapping("/reservations/{id}")
-    public Mono<ResponseEntity<?>> fetchReservation(final @PathVariable String id) {
+    public ResponseEntity<?> fetchReservation(final @PathVariable("id") String id) {
 
         final var reservation = this.reservationService.fetch(id);
-        final var response = reservation
+        return reservation
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-
-        return Mono.just(response);
     }
 
     @Value
