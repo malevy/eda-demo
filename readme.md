@@ -5,43 +5,14 @@ really bad ticketing website. There are two modes that the
 demo can be run in:
 
 1. a typical request/response system
-1. an EDA configuration that uses either RabbitMQ or Azure ServiceBus Topics.
+1. an EDA configuration that uses RabbitMQ.
 
-
-#### configuring Azure ServiceBus Topic
-
-> Note: there are opportunities for improvement here via automation
-
-Using this demo solution with Azure requires that you have configured the appropriate resources.
-1. you must have an Azure Subscription
-1. create a Resource Group to contain the ServiceBus Namespace
-1. create a Service Bus Namespace
-    1. the Premium tier or higher is required 
-1. create a Topic within the namespace
-1. create a Shared Access Policy (SAP) with the Send and Listen claims, at a minimum.
-    1. you will need to supply one of the generated connection strings as shown below.
-1. create three subscriptions against the topic. these subscriptions are named after the
-service that will make use of them.
-    1. order-processor
-    1. reservation-processor
-    1. payment-processor
 
 #### build and run the demo
 
-> the environment variable 'active_profile' needs to be set to either
->       'rabbitmq' to use RabbitMQ or
->       'azure-topic' for Azure ServiceBus Topic
-
-> the environment variable 'azure_topic_connectstring' should be set to one of the
-> connection strings that were generated when you created the SAP above. I am using a single
-> connection string for all the services for simplicity. a better practice would be for each 
-> service to have it's own access policy
-
     mvn clean package
-    export active_profile=azure-topic
-    export azure_topic_connectstring=...
-    docker-compose build --no-cache
-    docker-compose up
+    docker compose build --no-cache
+    docker compose up
 
 #### sample requests
 
@@ -87,10 +58,7 @@ on Windows
     winpty bash ./run-gatling-container.sh
 
 #### cleanup
-deleting the Azure Resource Group is a quick and easy way to release all of the resources that 
-were created within Azure.
-
-an easy way to remove all of the EDA images
+An easy way to remove all of the EDA images
 
      docker rmi $(docker images --filter=reference="eda*" -q)
 

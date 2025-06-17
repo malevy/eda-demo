@@ -21,10 +21,6 @@ spring:
         reservationPublisher-out-0:
           destination: ticketing-event
 
-    # disable azure servicebus
-    azure:
-      servicebus:
-        enabled: false
 
 app:
   services:
@@ -56,23 +52,3 @@ spring:
             producer:
               routing-key-expression: headers['message-type']
 
----
-# the destination is the Azure Servicebus Topic and the group is the Subscription
-# binder properties: https://github.com/Microsoft/spring-cloud-azure/tree/master/spring-cloud-azure-stream-binder/spring-cloud-azure-servicebus-topic-stream-binder
-spring:
-  config:
-    activate:
-      on-profile: azure-topic
-  cloud:
-    stream:
-      servicebus:
-        topic:
-          bindings:
-            reservationProcessor-in-0:
-              consumer:
-                checkpoint-mode: RECORD
-      default-binder: servicebus-topic
-    azure:
-      servicebus:
-        enabled: true
-        connection-string:

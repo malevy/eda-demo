@@ -26,13 +26,11 @@ cd eda-order-service && mvn test
 
 ### Docker Operations
 ```bash
-# Build containers (requires setting environment variables first)
-export active_profile=rabbitmq  # or azure-topic
-export azure_topic_connectstring="..."  # if using azure-topic
-docker-compose build --no-cache
+# Build containers
+docker compose build --no-cache
 
 # Start the system
-docker-compose up
+docker compose up
 
 # Remove EDA images
 docker rmi $(docker images --filter=reference="eda*" -q)
@@ -52,7 +50,7 @@ winpty bash ./run-gatling-container.sh
 - **eda-reservation-service**: Seat reservation management
 
 ### Messaging Infrastructure
-- **Message Broker**: RabbitMQ (default) or Azure Service Bus Topics
+- **Message Broker**: RabbitMQ
 - **Topic**: `ticketing-events` (single topic with filtered consumers)
 - **Consumer Groups**: 
   - `order-processor` (order service)
@@ -72,14 +70,11 @@ winpty bash ./run-gatling-container.sh
 ### Caching and Resilience
 - **Hazelcast**: Distributed caching for order and reservation services
 - **Chaos Monkey**: Fault injection for resilience testing
-- **Spring Profiles**: Environment-specific configurations (`rabbitmq`, `azure-topic`, `chaos-monkey`)
+- **Spring Profiles**: Environment-specific configurations (`rabbitmq`, `chaos-monkey`)
 
 ### Configuration Profiles
 - `rabbitmq`: Uses RabbitMQ message broker
-- `azure-topic`: Uses Azure Service Bus Topics  
 - `chaos-monkey`: Enables fault injection testing
 
 ### Environment Variables for Docker
-- `active_profile`: Set to `rabbitmq` or `azure-topic`
-- `azure_topic_connectstring`: Azure Service Bus connection string (if using azure-topic)
 - `chaos_monkey_enabled`: Enable chaos engineering (set to `true`)

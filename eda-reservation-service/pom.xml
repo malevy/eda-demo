@@ -33,12 +33,6 @@
             <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.microsoft.azure/spring-cloud-azure-servicebus-topic-stream-binder -->
-        <dependency>
-            <groupId>com.azure.spring</groupId>
-            <artifactId>spring-cloud-azure-stream-binder-servicebus</artifactId>
-            <version>5.22.0</version>
-        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
